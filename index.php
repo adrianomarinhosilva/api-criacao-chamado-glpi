@@ -1,6 +1,6 @@
 <?php
 
-// Função para buscar os computadores (WKS) da API do GLPI
+// Função para buscar os computadores (hostname) da API do GLPI
 function getComputers($url, $session_token, $app_token) {
     $headers = [
         'Content-Type: application/json',
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userIdRequester = $_POST['userIdRequester']; // ID do usuário selecionado
     $title = $_POST['title'];
     $description = $_POST['description'];
-    $wks = $_POST['wks']; // Recebe o WKS (computador) digitado pelo usuário
+    $hostname = $_POST['hostname']; // Recebe o hostname (computador) digitado pelo usuário
     $telefone = $_POST['telefone']; // Recebe o telefone digitado pelo usuário
 
     // Obtém o nome do usuário a partir do ID
@@ -79,11 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $observador = ''; // E-mail do observador, se necessário
 
     // Validação dos campos
-    if (empty($entityId) || empty($userIdRequester) || empty($title) || empty($description) || empty($wks) || empty($telefone)) {
+    if (empty($entityId) || empty($userIdRequester) || empty($title) || empty($description) || empty($hostname) || empty($telefone)) {
         $error = "Todos os campos devem ser preenchidos.";
     } else {
-        // Adiciona o WKS, telefone e requerente na descrição
-        $description .= "\n\n<br><b>WKS:</b> " . $wks;
+        // Adiciona o hostname, telefone e requerente na descrição
+        $description .= "\n\n<br><b>hostname:</b> " . $hostname;
         $description .= "\n<br><b>Telefone:</b> " . $telefone;
         $description .= "\n<br><b>Requerente:</b> " . $userName; // Adiciona o requerente aqui
 
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'requerentefield' => intval($userIdRequester), // Adiciona o requerente aqui
                 'telefonefield' => $telefone, // Adiciona o telefone aqui
                 'items_id' => [
-                    'Computer' => [$wks] // Vincula o WKS (computador) ao ticket
+                    'Computer' => [$hostname] // Vincula o hostname (computador) ao ticket
                 ],
                 'requesttypes_id' => $request_source_id,
                 '_users_id_requester' => intval($userIdRequester), // Vincula o ID do usuário como requerente
@@ -227,8 +227,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="mb-3">
-                <label for="wks" class="form-label">WKS</label>
-                <input type="text" class="form-control" id="wks" name="wks" required>
+                <label for="hostname" class="form-label">hostname</label>
+                <input type="text" class="form-control" id="hostname" name="hostname" required>
             </div>
 
             <div class="mb-3">
